@@ -1,6 +1,8 @@
 import urllib
 import urllib.request
 import random
+import requests
+from lxml import etree
 
 my_headers=[
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
@@ -23,15 +25,21 @@ my_headers=[
             "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24"
         ]
 
-url = "http://www.cbrc.gov.cn/"
-
+url = "https://www.xicidaili.com/"
 randdom_header=random.choice(my_headers)  
-  
-req = urllib.request.Request(url)
-
+req = urllib.request.Request(url) #此处使用requests请求时会出现错误
 req.add_header("User-Agent",randdom_header)
 req.add_header("GET",url)
 
 response = urllib.request.urlopen(req)
 html = response.read().decode('utf-8')
-print(html)
+selector = etree.HTML(html)
+iplist = selector.xpath('//*[@id="ip_list"]//tr/td[2]')
+ip_list = []
+for ip in iplist:
+    ip_list.append(ip.text)
+
+proxies =random.choice(ip_list)
+gov_url = "http://www.cbrc.gov.cn/chinese/newListDoc/111003/1.html"
+gov_html = requests.get(url,proxies = proxies)
+print(gov_html)
