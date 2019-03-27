@@ -1,6 +1,6 @@
 import os
 import requests
-from lxml import etree
+from bs4 import BeautifulSoup as bs
 from multiprocessing import pool
 from requests.exceptions import RequestException
 
@@ -25,7 +25,8 @@ class MaoYan:
             self.parse_html(html)
 
     def parse_html(self,html):
-        pass
+        content_html = bs(html,'html.parser').find('dl',class_="board-wrapper")
+        print(content_html)
         
 maoyan = MaoYan()
 url = 'https://maoyan.com/board/4?offset='
