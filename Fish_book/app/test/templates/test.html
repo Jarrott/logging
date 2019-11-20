@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block content %}
+    {{ super() }}  {# 继承layout的content #}
+<h1>{{data.age}}</h1>
+    {# if标签 #}
+{% if data.age < 18 %}
+    {{ data.__class__ }}
+    {% elif data.age == 18 %}
+    do something
+{% else %}
+
+    {{ data.aaa | default('未知')}}
+    {# 当属性不存在时才执行default #}
+{% endif %}
+
+{# for循环 #}
+    {# 字典循环 #}
+{% for key, value in data.items() %}
+    {{ value }}
+{% endfor %}
+    {% with messages = get_flashed_messages() %}
+        {{ messages }}
+        {# message只会在with里生效,with规定作用域 #}
+    {% endwith %}
+{% endblock %}
+
